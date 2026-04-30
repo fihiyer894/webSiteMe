@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>telegrambot.studio — Telegram-боти та сайти з високою конверсією</title>
+<meta name="description" content="Розробляємо Telegram-боти та лендінги, що автоматизують бізнес і максимізують результати." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+<style>
+/* ── VARIABLES ── */
+:root {
+  --bg:#FFFFFF; --bg2:#F4F7FF; --navy:#0A1F44; --accent:#2F6BFF;
+  --accent-light:#5b8fff; --accent-glow:rgba(47,107,255,0.25);
+  --text-h:#0B0B0B; --text-s:#5A5A5A; --border:rgba(10,31,68,0.09);
+  --shadow:0 4px 32px rgba(10,31,68,0.08); --shadow-hover:0 16px 48px rgba(47,107,255,0.18);
+  --radius:20px; --tr:0.35s cubic-bezier(0.4,0,0.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text-h);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+.container{max-width:1160px;margin:0 auto;padding:0 32px}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+.reveal-delay-4{transition-delay:.4s}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;
+  backdrop-filter:blur(20px) saturate(1.8);-webkit-backdrop-filter:blur(20px) saturate(1.8);
+  background:rgba(255,255,255,0.84);border-bottom:1px solid var(--border);
+  transition:box-shadow var(--tr)}
+nav.scrolled{box-shadow:0 2px 24px rgba(10,31,68,0.07)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:.95rem;color:var(--navy);letter-spacing:-.01em;white-space:nowrap}
+.logo-icon{width:34px;height:34px;flex-shrink:0;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.logo-icon svg{width:18px;height:18px;fill:#fff}
+.logo-name{display:flex;flex-direction:column;line-height:1.1}
+.logo-name span:first-child{font-weight:800;font-size:.9rem;color:var(--navy)}
+.logo-name span:last-child{font-weight:500;font-size:.7rem;color:var(--accent);letter-spacing:.04em}
+.nav-right{display:flex;align-items:center;gap:20px}
+.nav-links{display:flex;align-items:center;gap:28px;list-style:none}
+.nav-links a{font-size:.875rem;font-weight:500;color:var(--text-s);letter-spacing:.01em;transition:color var(--tr)}
+.nav-links a:hover{color:var(--navy)}
+.nav-cta{background:var(--accent);color:#fff!important;padding:9px 20px;border-radius:50px;
+  font-weight:600!important;font-size:.8125rem!important;white-space:nowrap;
+  transition:background var(--tr),box-shadow var(--tr),transform var(--tr)!important}
+.nav-cta:hover{background:var(--navy)!important;transform:translateY(-1px);box-shadow:0 8px 24px var(--accent-glow)!important}
+
+/* ── LANG SWITCHER ── */
+.lang-switcher{display:flex;align-items:center;background:var(--bg2);
+  border:1px solid var(--border);border-radius:50px;padding:3px;gap:2px}
+.lang-btn{font-family:'Sora',sans-serif;font-size:.72rem;font-weight:700;
+  letter-spacing:.07em;padding:5px 12px;border-radius:50px;border:none;
+  background:transparent;color:var(--text-s);cursor:pointer;
+  transition:background var(--tr),color var(--tr),box-shadow var(--tr)}
+.lang-btn.active{background:var(--accent);color:#fff;box-shadow:0 2px 8px var(--accent-glow)}
+.lang-btn:hover:not(.active){color:var(--navy)}
+
+/* ── HAMBURGER ── */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+.hamburger span{display:block;width:24px;height:2px;background:var(--navy);border-radius:2px;transition:var(--tr)}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:'Sora',sans-serif;
+  font-weight:600;font-size:.9375rem;letter-spacing:.01em;border-radius:50px;
+  padding:14px 30px;cursor:pointer;border:none;
+  transition:transform var(--tr),box-shadow var(--tr),background var(--tr),color var(--tr);
+  position:relative;overflow:hidden}
+.btn::after{content:'';position:absolute;inset:0;border-radius:inherit;opacity:0;
+  transition:opacity var(--tr);background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.2),transparent 70%)}
+.btn:hover::after{opacity:1}
+.btn svg{width:18px;height:18px;flex-shrink:0}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 4px 20px var(--accent-glow)}
+.btn-primary:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 12px 36px rgba(47,107,255,.35);background:#1d5aef}
+.btn-secondary{background:transparent;color:var(--navy);border:1.5px solid rgba(10,31,68,.2)}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(47,107,255,.12)}
+.btn-white{background:#fff;color:var(--navy)!important}
+.btn-white:hover{background:#f0f4ff;transform:translateY(-2px);box-shadow:0 12px 36px rgba(0,0,0,.2)!important}
+.btn-outline-white{background:transparent;color:rgba(255,255,255,.85)!important;border:1.5px solid rgba(255,255,255,.25)}
+.btn-outline-white:hover{border-color:rgba(255,255,255,.6);color:#fff!important;transform:translateY(-2px)}
+
+/* ── HERO ── */
+#hero{min-height:100vh;display:flex;align-items:center;padding-top:64px;
+  background:linear-gradient(160deg,#fff 0%,#EEF3FF 55%,#F0F5FF 100%);
+  position:relative;overflow:hidden}
+#hero::before{content:'';position:absolute;top:-120px;right:-120px;width:600px;height:600px;
+  border-radius:50%;background:radial-gradient(circle,rgba(47,107,255,.09) 0%,transparent 70%);pointer-events:none}
+#hero::after{content:'';position:absolute;bottom:-80px;left:-80px;width:400px;height:400px;
+  border-radius:50%;background:radial-gradient(circle,rgba(10,31,68,.05) 0%,transparent 70%);pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;padding:80px 0}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(47,107,255,.08);
+  border:1px solid rgba(47,107,255,.18);color:var(--accent);font-size:.8125rem;font-weight:600;
+  letter-spacing:.04em;text-transform:uppercase;padding:6px 16px;border-radius:50px;margin-bottom:28px}
+.hero-badge::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.6}}
+.hero-title{font-size:clamp(2.4rem,5vw,4.1rem);font-weight:800;line-height:1.08;letter-spacing:-.03em;color:var(--text-h);margin-bottom:22px}
+.hero-title .accent{color:var(--accent)}
+.hero-sub{font-size:1.125rem;line-height:1.7;color:var(--text-s);font-family:'DM Sans',sans-serif;font-weight:300;max-width:480px;margin-bottom:40px}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+.hero-stats{display:flex;gap:36px;margin-top:52px;padding-top:32px;border-top:1px solid var(--border)}
+.hero-stat-num{font-size:1.875rem;font-weight:800;color:var(--navy);letter-spacing:-.04em;line-height:1}
+.hero-stat-label{font-size:.8125rem;color:var(--text-s);margin-top:4px;font-family:'DM Sans',sans-serif}
+.robot-wrap{position:relative;display:flex;justify-content:center;align-items:center}
+.robot-glow{position:absolute;width:340px;height:340px;border-radius:50%;
+  background:radial-gradient(circle,rgba(47,107,255,.14) 0%,transparent 68%);animation:glow-pulse 4s ease-in-out infinite}
+@keyframes glow-pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.12);opacity:.7}}
+.robot-svg-container{position:relative;z-index:2;animation:float 5s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+
+/* ── SECTIONS ── */
+section{padding:112px 0}
+.section-label{display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+.section-title{font-size:clamp(2rem,3.5vw,3rem);font-weight:800;letter-spacing:-.03em;color:var(--text-h);line-height:1.1;margin-bottom:18px}
+.section-sub{font-size:1.0625rem;color:var(--text-s);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.7;max-width:560px}
+.section-header-center{text-align:center;margin-bottom:64px}
+.section-header-center .section-sub{margin:0 auto}
+
+/* ── SERVICES ── */
+#services{background:var(--bg)}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.service-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:40px 36px;
+  box-shadow:var(--shadow);transition:transform var(--tr),box-shadow var(--tr),border-color var(--tr);position:relative;overflow:hidden}
+.service-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--accent),var(--accent-light));transform:scaleX(0);transform-origin:left;transition:transform var(--tr)}
+.service-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-hover);border-color:rgba(47,107,255,.18)}
+.service-card:hover::before{transform:scaleX(1)}
+.service-icon{width:56px;height:56px;border-radius:16px;background:rgba(47,107,255,.08);display:flex;align-items:center;justify-content:center;margin-bottom:28px;transition:background var(--tr)}
+.service-card:hover .service-icon{background:rgba(47,107,255,.15)}
+.service-icon svg{width:26px;height:26px}
+.service-title{font-size:1.25rem;font-weight:700;color:var(--navy);margin-bottom:12px;letter-spacing:-.02em}
+.service-desc{font-size:.9375rem;color:var(--text-s);line-height:1.65;font-family:'DM Sans',sans-serif}
+
+/* ── WHY ── */
+#why{background:var(--bg2)}
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.why-points{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.why-point{background:#fff;border-radius:16px;padding:28px 24px;border:1px solid var(--border);transition:transform var(--tr),box-shadow var(--tr)}
+.why-point:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(47,107,255,.1)}
+.why-point-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-light));display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.why-point-icon svg{width:20px;height:20px;stroke:#fff;fill:none}
+.why-point-title{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:6px;letter-spacing:-.01em}
+.why-point-desc{font-size:.875rem;color:var(--text-s);font-family:'DM Sans',sans-serif;line-height:1.55}
+
+/* ── PROCESS ── */
+#process{background:var(--bg)}
+.process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;margin-top:64px}
+.process-steps::before{content:'';position:absolute;top:32px;left:15%;right:15%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--accent),var(--accent),transparent);opacity:.3}
+.process-step{display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 16px}
+.step-circle{width:64px;height:64px;border-radius:50%;background:#fff;border:1.5px solid rgba(47,107,255,.2);
+  display:flex;align-items:center;justify-content:center;font-size:1.25rem;font-weight:800;color:var(--accent);
+  margin-bottom:24px;position:relative;z-index:1;
+  transition:background var(--tr),border-color var(--tr),box-shadow var(--tr);
+  box-shadow:0 4px 16px rgba(47,107,255,.1)}
+.process-step:hover .step-circle{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 8px 28px var(--accent-glow)}
+.step-title{font-size:1.0625rem;font-weight:700;color:var(--navy);margin-bottom:8px;letter-spacing:-.01em}
+.step-desc{font-size:.875rem;color:var(--text-s);font-family:'DM Sans',sans-serif;line-height:1.55}
+
+/* ── PORTFOLIO ── */
+#portfolio{background:var(--bg2)}
+.portfolio-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+
+/* wide hero card — spans full row */
+.portfolio-card--wide{grid-column:1 / -1;display:grid;grid-template-columns:1fr 1fr}
+.portfolio-card--wide .portfolio-body{display:flex;flex-direction:column;justify-content:center;padding:40px 44px}
+.portfolio-card--wide .portfolio-title{font-size:1.5rem;margin-bottom:14px}
+.portfolio-card--wide .portfolio-desc{font-size:1rem;margin-bottom:24px}
+
+.portfolio-card{background:#fff;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow);transition:transform var(--tr),box-shadow var(--tr)}
+.portfolio-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-hover)}
+.portfolio-thumb{height:200px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.portfolio-thumb--robot{height:100%;min-height:260px}
+.portfolio-thumb-label{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.15);
+  backdrop-filter:blur(10px);color:#fff;font-size:.75rem;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;padding:5px 12px;border-radius:50px}
+.portfolio-thumb-icon{width:80px;height:80px;border-radius:20px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center}
+.portfolio-thumb-icon svg{width:40px;height:40px}
+
+/* floating status badges on robot card */
+.robot-badge{position:absolute;background:rgba(255,255,255,.13);backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.2);color:#fff;font-size:.75rem;font-weight:600;
+  padding:6px 14px;border-radius:50px;letter-spacing:.02em;pointer-events:none}
+.robot-badge--1{bottom:24px;left:20px;animation:badge-float 4s ease-in-out infinite}
+.robot-badge--2{bottom:24px;right:20px;animation:badge-float 4s ease-in-out infinite;animation-delay:1.5s}
+@keyframes badge-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+.portfolio-body{padding:28px 28px 32px}
+.portfolio-cat{font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.portfolio-title{font-size:1.1875rem;font-weight:700;color:var(--navy);margin-bottom:8px;letter-spacing:-.02em}
+.portfolio-desc{font-size:.9rem;color:var(--text-s);font-family:'DM Sans',sans-serif;line-height:1.6;margin-bottom:20px}
+.portfolio-result{display:inline-flex;align-items:center;gap:7px;background:rgba(47,107,255,.07);
+  color:var(--accent);font-size:.8125rem;font-weight:600;padding:6px 14px;border-radius:50px}
+.portfolio-result::before{content:'↑';font-size:.875rem}
+
+/* ── CTA ── */
+#cta{background:linear-gradient(140deg,var(--navy) 0%,#0e2b6e 55%,#1a3f8f 100%);padding:120px 0;position:relative;overflow:hidden}
+#cta::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(47,107,255,.25) 0%,transparent 70%)}
+#cta::after{content:'';position:absolute;bottom:-150px;left:10%;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.04) 0%,transparent 70%)}
+.cta-inner{position:relative;z-index:1;text-align:center;max-width:680px;margin:0 auto}
+.cta-tag{display:inline-block;background:rgba(47,107,255,.3);color:rgba(255,255,255,.85);font-size:.75rem;
+  font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:6px 16px;border-radius:50px;
+  margin-bottom:28px;border:1px solid rgba(255,255,255,.12)}
+.cta-title{font-size:clamp(2.25rem,4vw,3.5rem);font-weight:800;color:#fff;letter-spacing:-.03em;line-height:1.08;margin-bottom:20px}
+.cta-sub{font-size:1.0625rem;color:rgba(255,255,255,.65);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.65;margin-bottom:44px}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+/* ── CONTACT ── */
+#contact{background:var(--bg)}
+.contact-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:80px;align-items:start}
+.contact-info-list{list-style:none;margin-top:36px;display:flex;flex-direction:column;gap:20px}
+.contact-info-item{display:flex;align-items:center;gap:14px;font-size:.9375rem;color:var(--text-s);font-family:'DM Sans',sans-serif}
+.contact-info-item-icon{width:40px;height:40px;border-radius:12px;background:rgba(47,107,255,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.contact-info-item-icon svg{width:18px;height:18px;stroke:var(--accent);fill:none}
+.form-card{background:#fff;border:1px solid var(--border);border-radius:24px;padding:48px 44px;box-shadow:var(--shadow)}
+.form-group{margin-bottom:20px}
+.form-label{display:block;font-size:.8125rem;font-weight:600;color:var(--navy);letter-spacing:.02em;margin-bottom:8px}
+.form-input,.form-textarea{width:100%;font-family:'DM Sans',sans-serif;font-size:.9375rem;color:var(--text-h);
+  background:var(--bg2);border:1.5px solid transparent;border-radius:12px;padding:13px 16px;
+  transition:border-color var(--tr),box-shadow var(--tr),background var(--tr);outline:none;-webkit-appearance:none}
+.form-input::placeholder,.form-textarea::placeholder{color:#b0b8cc}
+.form-input:focus,.form-textarea:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 4px var(--accent-glow)}
+.form-input.error,.form-textarea.error{border-color:#e53e3e;box-shadow:0 0 0 4px rgba(229,62,62,.12)}
+.form-error-msg{font-size:.8125rem;color:#e53e3e;margin-top:5px;display:none}
+.form-error-msg.show{display:block}
+.form-textarea{resize:vertical;min-height:120px}
+.form-submit-row{margin-top:28px}
+.btn-submit{width:100%;justify-content:center;padding:16px;font-size:1rem}
+.btn-spinner{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn-submit.loading .btn-text{display:none}
+.btn-submit.loading .btn-spinner{display:block}
+.btn-submit:disabled{opacity:.7;cursor:not-allowed}
+.form-success{display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;gap:16px}
+.form-success.show{display:flex}
+.success-checkmark{width:72px;height:72px;border-radius:50%;background:rgba(47,107,255,.1);display:flex;align-items:center;justify-content:center;animation:pop .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{0%{transform:scale(0)}100%{transform:scale(1)}}
+.success-checkmark svg{width:36px;height:36px;stroke:var(--accent);fill:none}
+.success-title{font-size:1.5rem;font-weight:700;color:var(--navy);letter-spacing:-.02em}
+.success-text{font-size:.9375rem;color:var(--text-s);font-family:'DM Sans',sans-serif;line-height:1.6}
+
+/* ── FOOTER ── */
+footer{background:var(--navy);color:rgba(255,255,255,.5);padding:48px 0}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
+.footer-logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.05rem;color:#fff}
+.footer-logo .logo-icon{background:rgba(255,255,255,.12)}
+.footer-links{display:flex;gap:28px;list-style:none}
+.footer-links a{font-size:.875rem;color:rgba(255,255,255,.5);transition:color var(--tr)}
+.footer-links a:hover{color:#fff}
+.footer-copy{font-size:.8125rem}
+
+/* ── MOBILE MENU ── */
+.mobile-menu{display:none;position:fixed;inset:0;z-index:90;background:rgba(255,255,255,.97);
+  backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:28px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:1.5rem;font-weight:600;color:var(--navy);transition:color var(--tr)}
+.mobile-menu a:hover{color:var(--accent)}
+.mobile-close{position:absolute;top:20px;right:24px;background:none;border:none;font-size:2rem;color:var(--navy);cursor:pointer}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .hero-grid{grid-template-columns:1fr;gap:40px;text-align:center}
+  .hero-sub{max-width:100%}
+  .hero-btns{justify-content:center}
+  .hero-stats{justify-content:center}
+  .robot-wrap{order:-1}
+  .services-grid{grid-template-columns:1fr}
+  .why-grid{grid-template-columns:1fr}
+  .process-steps{grid-template-columns:repeat(2,1fr)}
+  .process-steps::before{display:none}
+  .portfolio-grid{grid-template-columns:1fr}
+  .portfolio-card--wide{grid-column:1;grid-template-columns:1fr}
+  .portfolio-thumb--robot{min-height:220px;height:220px}
+  .contact-grid{grid-template-columns:1fr}
+}
+@media(max-width:680px){
+  .container{padding:0 20px}
+  section{padding:80px 0}
+  .nav-links,.lang-switcher{display:none}
+  .hamburger{display:flex}
+  .hero-grid{padding:60px 0 40px}
+  .why-points{grid-template-columns:1fr}
+  .process-steps{grid-template-columns:1fr}
+  .form-card{padding:32px 24px}
+  .hero-stats{flex-direction:column;gap:16px}
+  .footer-inner{flex-direction:column;text-align:center}
+  .portfolio-card--wide .portfolio-body{padding:28px 24px 32px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav id="navbar">
+  <div class="container nav-inner">
+    <a href="#hero" class="logo">
+      <span class="logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-4H7l5-8v4h4l-5 8z"/></svg>
+      </span>
+      <span class="logo-name">
+        <span>telegrambot</span>
+        <span>.studio</span>
+      </span>
+    </a>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#services" data-i18n="nav.services">Послуги</a></li>
+        <li><a href="#why"      data-i18n="nav.why">Чому ми</a></li>
+        <li><a href="#process"  data-i18n="nav.process">Процес</a></li>
+        <li><a href="#portfolio" data-i18n="nav.portfolio">Портфоліо</a></li>
+        <li><a href="#contact" class="nav-cta" data-i18n="nav.cta">Зв'язатись</a></li>
+      </ul>
+      <div class="lang-switcher" id="desktopSwitcher">
+        <button class="lang-btn active" id="btnUK" onclick="setLang('uk')">UA</button>
+        <button class="lang-btn"        id="btnEN" onclick="setLang('en')">EN</button>
+      </div>
+    </div>
+    <button class="hamburger" id="menuBtn" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<nav class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="menuClose">×</button>
+  <a href="#services"  onclick="closeMobileMenu()" data-i18n="nav.services">Послуги</a>
+  <a href="#why"       onclick="closeMobileMenu()" data-i18n="nav.why">Чому ми</a>
+  <a href="#process"   onclick="closeMobileMenu()" data-i18n="nav.process">Процес</a>
+  <a href="#portfolio" onclick="closeMobileMenu()" data-i18n="nav.portfolio">Портфоліо</a>
+  <a href="#contact"   onclick="closeMobileMenu()" data-i18n="nav.cta">Зв'язатись</a>
+  <div class="lang-switcher" style="margin-top:8px">
+    <button class="lang-btn" onclick="setLang('uk');closeMobileMenu()">UA</button>
+    <button class="lang-btn" onclick="setLang('en');closeMobileMenu()">EN</button>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-badge reveal" data-i18n="hero.badge">Відкриті до нових проєктів</div>
+        <h1 class="hero-title reveal reveal-delay-1">
+          <span data-i18n="hero.title1">Telegram-боти та сайти,</span><br>
+          <span data-i18n="hero.title2">що </span><span class="accent" data-i18n="hero.title3">працюють на вас</span>
+        </h1>
+        <p class="hero-sub reveal reveal-delay-2" data-i18n="hero.sub">
+          Автоматизуємо бізнес-процеси, підвищуємо конверсії та створюємо сучасні цифрові продукти — щоб ви зосередились на зростанні.
+        </p>
+        <div class="hero-btns reveal reveal-delay-3">
+          <a href="#contact" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 0116 1.18a2 2 0 012 2v3a2 2 0 01-1.44 1.93 15.91 15.91 0 00-3.27.92 1 1 0 01-.98-.21l-2.16-2.16a15.93 15.93 0 01-7.24 7.24l2.16 2.16a1 1 0 01.21.98 15.91 15.91 0 00-.92 3.27A2 2 0 0122 16.92z"/></svg>
+            <span data-i18n="hero.btn1">Залишити заявку</span>
+          </a>
+          <a href="https://t.me/yourusername" target="_blank" class="btn btn-secondary">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.96 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+            <span data-i18n="hero.btn2">Написати в Telegram</span>
+          </a>
+        </div>
+        <div class="hero-stats reveal reveal-delay-4">
+          <div>
+            <div class="hero-stat-num" data-i18n="hero.stat1n">3д+</div>
+            <div class="hero-stat-label" data-i18n="hero.stat1l">Старт з 3 днів</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">50+</div>
+            <div class="hero-stat-label" data-i18n="hero.stat2l">Реалізованих проєктів</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">98%</div>
+            <div class="hero-stat-label" data-i18n="hero.stat3l">Задоволених клієнтів</div>
+          </div>
+        </div>
+      </div>
+      <!-- Robot -->
+      <div class="robot-wrap reveal reveal-delay-2">
+        <div class="robot-glow"></div>
+        <div class="robot-svg-container">
+          <svg width="320" height="360" viewBox="0 0 340 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="170" cy="370" rx="80" ry="10" fill="rgba(47,107,255,0.1)"/>
+            <rect x="163" y="20" width="14" height="38" rx="7" fill="#0A1F44"/>
+            <circle cx="170" cy="15" r="13" fill="#2F6BFF"/>
+            <circle cx="170" cy="15" r="7" fill="white" opacity="0.9"><animate attributeName="opacity" values="0.9;0.3;0.9" dur="2.5s" repeatCount="indefinite"/></circle>
+            <rect x="96" y="56" width="148" height="118" rx="28" fill="#EEF3FF" stroke="#2F6BFF" stroke-width="2"/>
+            <rect x="112" y="72" width="116" height="86" rx="16" fill="#0A1F44"/>
+            <rect x="128" y="90" width="32" height="22" rx="8" fill="#2F6BFF"/>
+            <rect x="180" y="90" width="32" height="22" rx="8" fill="#2F6BFF"/>
+            <circle cx="144" cy="101" r="7" fill="white"><animate attributeName="cy" values="101;100;103;101" dur="4s" repeatCount="indefinite"/></circle>
+            <circle cx="196" cy="101" r="7" fill="white"><animate attributeName="cy" values="101;100;103;101" dur="4s" repeatCount="indefinite"/></circle>
+            <rect x="128" y="90" width="32" height="22" rx="8" fill="#2F6BFF" opacity="0"><animate attributeName="opacity" values="0;0;0;0;0;0;0;0;0;1;0;0;0;0;0;0;0;0;0;0" dur="6s" repeatCount="indefinite"/></rect>
+            <rect x="180" y="90" width="32" height="22" rx="8" fill="#2F6BFF" opacity="0"><animate attributeName="opacity" values="0;0;0;0;0;0;0;0;0;1;0;0;0;0;0;0;0;0;0;0" dur="6s" repeatCount="indefinite"/></rect>
+            <rect x="138" y="126" width="64" height="12" rx="6" fill="#2F6BFF" opacity="0.7"/>
+            <rect x="148" y="126" width="44" height="12" rx="6" fill="#5b8fff" opacity="0.6"/>
+            <rect x="84" y="90" width="14" height="32" rx="7" fill="#2F6BFF"/>
+            <rect x="242" y="90" width="14" height="32" rx="7" fill="#2F6BFF"/>
+            <rect x="155" y="172" width="30" height="22" rx="8" fill="#C4D4FF"/>
+            <rect x="78" y="192" width="184" height="136" rx="28" fill="#EEF3FF" stroke="#2F6BFF" stroke-width="2"/>
+            <rect x="102" y="214" width="136" height="90" rx="16" fill="#0A1F44"/>
+            <circle cx="132" cy="234" r="8" fill="#2F6BFF"><animate attributeName="opacity" values="1;0.4;1" dur="1.8s" repeatCount="indefinite"/></circle>
+            <circle cx="157" cy="234" r="8" fill="#5b8fff"><animate attributeName="opacity" values="1;0.4;1" dur="1.8s" begin="0.3s" repeatCount="indefinite"/></circle>
+            <circle cx="182" cy="234" r="8" fill="#8aaeff"><animate attributeName="opacity" values="1;0.4;1" dur="1.8s" begin="0.6s" repeatCount="indefinite"/></circle>
+            <circle cx="207" cy="234" r="8" fill="#2F6BFF"><animate attributeName="opacity" values="1;0.4;1" dur="1.8s" begin="0.9s" repeatCount="indefinite"/></circle>
+            <rect x="118" y="260" width="104" height="8" rx="4" fill="#1a2f5a"/>
+            <rect x="118" y="260" width="72" height="8" rx="4" fill="#2F6BFF"><animate attributeName="width" values="30;80;60;72" dur="5s" repeatCount="indefinite"/></rect>
+            <rect x="118" y="278" width="60" height="5" rx="2.5" fill="#1a2f5a"/>
+            <rect x="118" y="278" width="40" height="5" rx="2.5" fill="#5b8fff" opacity="0.6"/>
+            <rect x="36" y="202" width="44" height="112" rx="22" fill="#EEF3FF" stroke="#2F6BFF" stroke-width="2"><animateTransform attributeName="transform" type="rotate" values="0 58 202;4 58 202;0 58 202;-2 58 202;0 58 202" dur="5s" repeatCount="indefinite"/></rect>
+            <circle cx="58" cy="325" r="18" fill="#C4D4FF" stroke="#2F6BFF" stroke-width="1.5"/>
+            <rect x="260" y="202" width="44" height="112" rx="22" fill="#EEF3FF" stroke="#2F6BFF" stroke-width="2"><animateTransform attributeName="transform" type="rotate" values="0 282 202;-4 282 202;0 282 202;2 282 202;0 282 202" dur="5s" begin="0.5s" repeatCount="indefinite"/></rect>
+            <circle cx="282" cy="325" r="18" fill="#C4D4FF" stroke="#2F6BFF" stroke-width="1.5"/>
+            <rect x="118" y="326" width="40" height="48" rx="14" fill="#C4D4FF" stroke="#2F6BFF" stroke-width="1.5"/>
+            <rect x="182" y="326" width="40" height="48" rx="14" fill="#C4D4FF" stroke="#2F6BFF" stroke-width="1.5"/>
+            <rect x="106" y="360" width="56" height="16" rx="8" fill="#0A1F44"/>
+            <rect x="178" y="360" width="56" height="16" rx="8" fill="#0A1F44"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SERVICES ══ -->
+<section id="services">
+  <div class="container">
+    <div class="section-header-center reveal">
+      <span class="section-label" data-i18n="srv.label">Що ми робимо</span>
+      <h2 class="section-title" data-i18n="srv.title">Наші послуги</h2>
+      <p class="section-sub" data-i18n="srv.sub">Від розумних ботів до сайтів з високою конверсією — ми створюємо цифрові інструменти, що справді рухають ваш бізнес вперед.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#2F6BFF" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <h3 class="service-title" data-i18n="srv.c1.t">Telegram-боти</h3>
+        <p class="service-desc"  data-i18n="srv.c1.d">Автоматизація спілкування з клієнтами, платежі, сповіщення та складні робочі процеси — все всередині Telegram, яким ваші клієнти вже користуються.</p>
+      </div>
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#2F6BFF" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <h3 class="service-title" data-i18n="srv.c2.t">Лендінг-сайти</h3>
+        <p class="service-desc"  data-i18n="srv.c2.d">Швидкі, візуально чисті односторінкові сайти з високою конверсією — розроблені з нуля, щоб перетворювати відвідувачів на клієнтів.</p>
+      </div>
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#2F6BFF" stroke-width="1.8"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <h3 class="service-title" data-i18n="srv.c3.t">Інтеграції</h3>
+        <p class="service-desc"  data-i18n="srv.c3.d">Підключення до API, баз даних, платіжних сервісів та сторонніх інструментів. Змушуємо ваші сервіси працювати разом як єдиний злагоджений механізм.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WHY ══ -->
+<section id="why">
+  <div class="container">
+    <div class="why-grid">
+      <div>
+        <span class="section-label reveal" data-i18n="why.label">Наша перевага</span>
+        <h2 class="section-title reveal" data-i18n="why.title">Чому обирають telegrambot.studio</h2>
+        <p class="section-sub reveal"    data-i18n="why.sub">Ми не робимо шаблонного. Кожен проєкт — унікальна бізнес-задача з індивідуальним рішенням.</p>
+      </div>
+      <div class="why-points">
+        <div class="why-point reveal">
+          <div class="why-point-icon"><svg viewBox="0 0 24 24" stroke-width="2.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="why-point-title" data-i18n="why.p1t">Швидка розробка</div>
+          <div class="why-point-desc"  data-i18n="why.p1d">Перша робоча версія від 3 днів. Рухаємось швидко, не жертвуючи якістю.</div>
+        </div>
+        <div class="why-point reveal reveal-delay-1">
+          <div class="why-point-icon"><svg viewBox="0 0 24 24" stroke-width="2.2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="why-point-title" data-i18n="why.p2t">Індивідуальні рішення</div>
+          <div class="why-point-desc"  data-i18n="why.p2d">Жодних шаблонів. Кожен рядок коду написано під ваші конкретні цілі.</div>
+        </div>
+        <div class="why-point reveal reveal-delay-2">
+          <div class="why-point-icon"><svg viewBox="0 0 24 24" stroke-width="2.2"><path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="why-point-title" data-i18n="why.p3t">Бізнес-орієнтований підхід</div>
+          <div class="why-point-desc"  data-i18n="why.p3d">Думаємо конверсіями та ROI, а не лише кодом і пікселями. Результат — понад усе.</div>
+        </div>
+        <div class="why-point reveal reveal-delay-3">
+          <div class="why-point-icon"><svg viewBox="0 0 24 24" stroke-width="2.2"><path d="M18 20V10M12 20V4M6 20v-6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="why-point-title" data-i18n="why.p4t">Підтримка після запуску</div>
+          <div class="why-point-desc"  data-i18n="why.p4d">Залишаємось поруч після релізу. Оновлення, фікси, ітерації — ми поруч.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROCESS ══ -->
+<section id="process">
+  <div class="container">
+    <div class="section-header-center reveal">
+      <span class="section-label" data-i18n="proc.label">Як це працює</span>
+      <h2 class="section-title" data-i18n="proc.title">Наш процес</h2>
+      <p class="section-sub"    data-i18n="proc.sub">Просто, прозоро та побудовано навколо ваших потреб. Ось як ми перетворюємо ідею на готовий продукт.</p>
+    </div>
+    <div class="process-steps">
+      <div class="process-step reveal">
+        <div class="step-circle">01</div>
+        <div class="step-title" data-i18n="proc.s1t">Заявка</div>
+        <div class="step-desc"  data-i18n="proc.s1d">Розкажіть про проєкт. Уважно слухаємо та занурюємось у ваші цілі й задачі.</div>
+      </div>
+      <div class="process-step reveal reveal-delay-1">
+        <div class="step-circle">02</div>
+        <div class="step-title" data-i18n="proc.s2t">Аналіз</div>
+        <div class="step-desc"  data-i18n="proc.s2d">Обираємо оптимальний технічний підхід і складаємо чіткий план розробки.</div>
+      </div>
+      <div class="process-step reveal reveal-delay-2">
+        <div class="step-circle">03</div>
+        <div class="step-title" data-i18n="proc.s3t">Розробка</div>
+        <div class="step-desc"  data-i18n="proc.s3d">Чистий код, регулярні оновлення та повна прозорість на кожному етапі.</div>
+      </div>
+      <div class="process-step reveal reveal-delay-3">
+        <div class="step-circle">04</div>
+        <div class="step-title" data-i18n="proc.s4t">Запуск</div>
+        <div class="step-desc"  data-i18n="proc.s4d">Деплоємо, тестуємо та передаємо. Ви отримуєте готовий продукт, що генерує результати.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PORTFOLIO ══ -->
+<section id="portfolio">
+  <div class="container">
+    <div class="section-header-center reveal">
+      <span class="section-label" data-i18n="port.label">Кейси</span>
+      <h2 class="section-title"   data-i18n="port.title">Вибрані роботи</h2>
+      <p class="section-sub"      data-i18n="port.sub">Реальні проєкти, реальні результати. Погляньте, що ми побудували для бізнесів, подібних до вашого.</p>
+    </div>
+    <div class="portfolio-grid">
+      <!-- ── HERO CARD: SaaS + Robot ── -->
+      <div class="portfolio-card portfolio-card--wide reveal">
+        <div class="portfolio-thumb portfolio-thumb--robot" style="background:linear-gradient(135deg,#091929 0%,#0A1F44 50%,#1a3f8f 100%)">
+          <span class="portfolio-thumb-label" data-i18n="port.tag.combo">Бот + Лендінг</span>
+          <!-- Mini Robot SVG -->
+          <svg width="180" height="200" viewBox="0 0 340 380" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:.85">
+            <rect x="163" y="20" width="14" height="38" rx="7" fill="#0A1F44"/>
+            <circle cx="170" cy="15" r="13" fill="#2F6BFF"/>
+            <circle cx="170" cy="15" r="7" fill="white" opacity="0.9"><animate attributeName="opacity" values="0.9;0.3;0.9" dur="2.5s" repeatCount="indefinite"/></circle>
+            <rect x="96" y="56" width="148" height="118" rx="28" fill="rgba(238,243,255,0.15)" stroke="#2F6BFF" stroke-width="2"/>
+            <rect x="112" y="72" width="116" height="86" rx="16" fill="#0A1F44"/>
+            <rect x="128" y="90" width="32" height="22" rx="8" fill="#2F6BFF"/>
+            <rect x="180" y="90" width="32" height="22" rx="8" fill="#2F6BFF"/>
+            <circle cx="144" cy="101" r="7" fill="white"><animate attributeName="cy" values="101;100;103;101" dur="4s" repeatCount="indefinite"/></circle>
+            <circle cx="196" cy="101" r="7" fill="white"><animate attributeName="cy" values="101;100;103;101" dur="4s" repeatCount="indefinite"/></circle>
+            <rect x="128" y="90" width="32" height="22" rx="8" fill="#2F6BFF" opacity="0"><animate attributeName="opacity" values="0;0;0;0;0;0;0;0;0;1;0" dur="6s" repeatCount="indefinite"/></rect>
+            <rect x="180" y="90" width="32" height="22" rx="8" fill="#2F6BFF" opacity="0"><animate attributeName="opacity" values="0;0;0;0;0;0;0;0;0;1;0" dur="6s" repeatCount="indefinite"/></rect>
+            <rect x="138" y="126" width="64" height="12" rx="6" fill="#2F6BFF" opacity="0.7"/>
+            <rect x="84" y="90" width="14" height="32" rx="7" fill="#2F6BFF"/>
+            <rect x="242" y="90" width="14" height="32" rx="7" fill="#2F6BFF"/>
+            <rect x="155" y="172" width="30" height="22" rx="8" fill="rgba(196,212,255,0.5)"/>
+            <rect x="78" y="192" width="184" height="136" rx="28" fill="rgba(238,243,255,0.12)" stroke="#2F6BFF" stroke-width="2"/>
+            <rect x="102" y="214" width="136" height="90" rx="16" fill="#0A1F44"/>
+            <circle cx="132" cy="240" r="8" fill="#2F6BFF"><animate attributeName="opacity" values="1;0.4;1" dur="1.8s" repeatCount="indefinite"/></circle>
+            <circle cx="157" cy="240" r="8" fill="#5b8fff"><animate attributeName="opacity" values="1;0.4;1" dur="1.8s" begin="0.3s" repeatCount="indefinite"/></circle>
+            <circle cx="182" cy="240" r="8" fill="#8aaeff"><animate attributeName="opacity" values="1;0.4;1" dur="1.8s" begin="0.6s" repeatCount="indefinite"/></circle>
+            <circle cx="207" cy="240" r="8" fill="#2F6BFF"><animate attributeName="opacity" values="1;0.4;1" dur="1.8s" begin="0.9s" repeatCount="indefinite"/></circle>
+            <rect x="118" y="265" width="104" height="7" rx="3.5" fill="#1a2f5a"/>
+            <rect x="118" y="265" width="72" height="7" rx="3.5" fill="#2F6BFF"><animate attributeName="width" values="30;80;60;72" dur="5s" repeatCount="indefinite"/></rect>
+            <rect x="36" y="202" width="44" height="100" rx="22" fill="rgba(238,243,255,0.15)" stroke="#2F6BFF" stroke-width="2"><animateTransform attributeName="transform" type="rotate" values="0 58 202;4 58 202;0 58 202;-2 58 202;0 58 202" dur="5s" repeatCount="indefinite"/></rect>
+            <rect x="260" y="202" width="44" height="100" rx="22" fill="rgba(238,243,255,0.15)" stroke="#2F6BFF" stroke-width="2"><animateTransform attributeName="transform" type="rotate" values="0 282 202;-4 282 202;0 282 202;2 282 202;0 282 202" dur="5s" begin="0.5s" repeatCount="indefinite"/></rect>
+            <rect x="118" y="326" width="40" height="44" rx="14" fill="rgba(196,212,255,0.3)" stroke="#2F6BFF" stroke-width="1.5"/>
+            <rect x="182" y="326" width="40" height="44" rx="14" fill="rgba(196,212,255,0.3)" stroke="#2F6BFF" stroke-width="1.5"/>
+            <rect x="106" y="356" width="56" height="14" rx="7" fill="#0A1F44"/>
+            <rect x="178" y="356" width="56" height="14" rx="7" fill="#0A1F44"/>
+          </svg>
+          <!-- Floating badges -->
+          <div class="robot-badge robot-badge--1">🤖 Bot live</div>
+          <div class="robot-badge robot-badge--2">⚡ Auto-onboard</div>
+        </div>
+        <div class="portfolio-body">
+          <div class="portfolio-cat"   data-i18n="port.p4cat">SaaS-стартап</div>
+          <h3 class="portfolio-title"  data-i18n="port.p4tit">Система онбордингу SaaS</h3>
+          <p class="portfolio-desc"    data-i18n="port.p4des">Наш розумний бот-робот зустрічає кожного нового користувача: проводить по продукту, відповідає на питання та автоматично передає корпоративні запити в команду продажів — без жодного ручного втручання.</p>
+          <span class="portfolio-result" data-i18n="port.p4res">95% завершення онбордингу</span>
+        </div>
+      </div>
+
+      <!-- Card 1: Fitness -->
+      <div class="portfolio-card reveal reveal-delay-1">
+        <div class="portfolio-thumb" style="background:linear-gradient(135deg,#0A1F44,#1a3f8f)">
+          <span class="portfolio-thumb-label" data-i18n="port.tag.bot">Telegram-бот</span>
+          <div class="portfolio-thumb-icon"><svg viewBox="0 0 24 24" fill="rgba(255,255,255,.6)"><path d="M20.665 3.717l-17.73 6.837c-1.21.486-1.203 1.161-.222 1.462l4.552 1.42 10.532-6.645c.498-.303.953-.14.579.192l-8.533 7.701h-.002l.002.001-.314 4.692c.46 0 .663-.211.921-.46l2.211-2.15 4.599 3.397c.848.467 1.457.227 1.668-.785l3.019-14.228c.309-1.239-.473-1.8-1.282-1.434z"/></svg></div>
+        </div>
+        <div class="portfolio-body">
+          <div class="portfolio-cat"   data-i18n="port.p1cat">Фітнес-індустрія</div>
+          <h3 class="portfolio-title"  data-i18n="port.p1tit">Бот для фітнес-тренера</h3>
+          <p class="portfolio-desc"    data-i18n="port.p1des">Комплексний Telegram-бот: автоматичний запис, оплата, доставка планів тренувань та відстеження прогресу клієнтів — без сторонніх застосунків.</p>
+          <span class="portfolio-result" data-i18n="port.p1res">340% утримання клієнтів</span>
+        </div>
+      </div>
+
+      <!-- Card 2: E-Commerce -->
+      <div class="portfolio-card reveal reveal-delay-2">
+        <div class="portfolio-thumb" style="background:linear-gradient(135deg,#103060,#2F6BFF)">
+          <span class="portfolio-thumb-label" data-i18n="port.tag.bot">Telegram-бот</span>
+          <div class="portfolio-thumb-icon"><svg viewBox="0 0 24 24" fill="rgba(255,255,255,.6)"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0"/></svg></div>
+        </div>
+        <div class="portfolio-body">
+          <div class="portfolio-cat"   data-i18n="port.p2cat">E-Commerce</div>
+          <h3 class="portfolio-title"  data-i18n="port.p2tit">Бот-каталог для e-commerce</h3>
+          <p class="portfolio-desc"    data-i18n="port.p2des">Повноцінний Telegram-магазин: каталог із пошуком, кошик, інтеграція з оплатою, підтвердження замовлень та сповіщення адміністратора.</p>
+          <span class="portfolio-result" data-i18n="port.p2res">210% конверсія</span>
+        </div>
+      </div>
+
+      <!-- Card 3: Law firm -->
+      <div class="portfolio-card reveal reveal-delay-3">
+        <div class="portfolio-thumb" style="background:linear-gradient(135deg,#0d2b5e,#1a6bff)">
+          <span class="portfolio-thumb-label" data-i18n="port.tag.land">Лендінг</span>
+          <div class="portfolio-thumb-icon"><svg viewBox="0 0 24 24" fill="rgba(255,255,255,.6)"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        </div>
+        <div class="portfolio-body">
+          <div class="portfolio-cat"   data-i18n="port.p3cat">Юридичні послуги</div>
+          <h3 class="portfolio-title"  data-i18n="port.p3tit">Сайт юридичної компанії</h3>
+          <p class="portfolio-desc"    data-i18n="port.p3des">Преміум односторінковий сайт: витончений дизайн, швидке завантаження, SEO-оптимізація та форма запису, підключена до Telegram-сповіщень.</p>
+          <span class="portfolio-result" data-i18n="port.p3res">180% кваліфікованих лідів</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<section id="cta">
+  <div class="container">
+    <div class="cta-inner">
+      <div class="cta-tag reveal" data-i18n="cta.tag">Працюймо разом</div>
+      <h2 class="cta-title reveal" data-i18n="cta.title">Готові автоматизувати бізнес?</h2>
+      <p class="cta-sub reveal"    data-i18n="cta.sub">Залиште заявку — і ми покажемо рішення, що підходить саме вам. Без шаблонних пітчів і зайвого часу.</p>
+      <div class="cta-btns reveal">
+        <a href="#contact" class="btn btn-white">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 0116 1.18a2 2 0 012 2v3a2 2 0 01-1.44 1.93 15.91 15.91 0 00-3.27.92 1 1 0 01-.98-.21l-2.16-2.16a15.93 15.93 0 01-7.24 7.24l2.16 2.16a1 1 0 01.21.98 15.91 15.91 0 00-.92 3.27A2 2 0 0122 16.92z"/></svg>
+          <span data-i18n="cta.btn1">Залишити заявку</span>
+        </a>
+        <a href="https://t.me/yourusername" target="_blank" class="btn btn-outline-white">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.96 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          <span data-i18n="cta.btn2">Написати менеджеру</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div>
+        <span class="section-label reveal" data-i18n="con.label">Зв'язок</span>
+        <h2 class="section-title reveal"   data-i18n="con.title">Почнімо розмову</h2>
+        <p class="section-sub reveal"      data-i18n="con.sub">Заповніть форму — і ми відповімо протягом 1 робочої години. Без спаму та нав'язування — лише фокусна розмова про ваш проєкт.</p>
+        <ul class="contact-info-list reveal">
+          <li class="contact-info-item">
+            <span class="contact-info-item-icon"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            @yourusername
+          </li>
+          <li class="contact-info-item">
+            <span class="contact-info-item-icon"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 0116 1.18a2 2 0 012 2v3a2 2 0 01-1.44 1.93 15.91 15.91 0 00-3.27.92 1 1 0 01-.98-.21l-2.16-2.16a15.93 15.93 0 01-7.24 7.24l2.16 2.16a1 1 0 01.21.98 15.91 15.91 0 00-.92 3.27A2 2 0 0122 16.92z" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            +380 00 000 00 00
+          </li>
+          <li class="contact-info-item">
+            <span class="contact-info-item-icon"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke-linecap="round" stroke-linejoin="round"/><polyline points="22,6 12,13 2,6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            hello@botforge.dev
+          </li>
+        </ul>
+      </div>
+      <div class="form-card reveal">
+        <div id="formContent">
+          <div class="form-group">
+            <label class="form-label" for="fname">
+              <span data-i18n="form.name">Ваше ім'я</span> <span style="color:var(--accent)">*</span>
+            </label>
+            <input class="form-input" type="text" id="fname" autocomplete="name"
+              data-ph-uk="Олексій Коваленко" data-ph-en="Alex Johnson" placeholder="Олексій Коваленко"/>
+            <div class="form-error-msg" id="fname-err" data-i18n="form.name.err">Будь ласка, введіть ім'я</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fcontact">
+              <span data-i18n="form.contact">Telegram або телефон</span> <span style="color:var(--accent)">*</span>
+            </label>
+            <input class="form-input" type="text" id="fcontact" autocomplete="tel"
+              data-ph-uk="@username або +380..." data-ph-en="@username or +1 555..." placeholder="@username або +380..."/>
+            <div class="form-error-msg" id="fcontact-err" data-i18n="form.contact.err">Будь ласка, вкажіть спосіб зв'язку</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fmessage" data-i18n="form.msg">Опишіть вашу задачу</label>
+            <textarea class="form-textarea" id="fmessage"
+              data-ph-uk="Потрібен Telegram-бот для..." data-ph-en="I need a Telegram bot that..." placeholder="Потрібен Telegram-бот для..."></textarea>
+          </div>
+          <input type="text" id="hp_field" style="display:none" tabindex="-1" autocomplete="off"/>
+          <div class="form-submit-row">
+            <button class="btn btn-primary btn-submit" id="submitBtn" onclick="handleSubmit()">
+              <span class="btn-text" data-i18n="form.submit">Надіслати заявку →</span>
+              <span class="btn-spinner"></span>
+            </button>
+          </div>
+        </div>
+        <div class="form-success" id="formSuccess">
+          <div class="success-checkmark">
+            <svg viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="success-title" data-i18n="form.ok.t">Заявку надіслано!</div>
+          <div class="success-text"  data-i18n="form.ok.d">Відповімо протягом 1 робочої години. Очікуйте повідомлення в Telegram або на телефон.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-logo">
+      <span class="logo-icon" style="background:rgba(255,255,255,.12)"><svg viewBox="0 0 24 24" fill="rgba(255,255,255,.7)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-4H7l5-8v4h4l-5 8z"/></svg></span>
+      <span class="logo-name" style="color:#fff">
+        <span style="color:#fff;font-size:.9rem;font-weight:800">telegrambot</span>
+        <span style="color:rgba(255,255,255,.55);font-size:.7rem;font-weight:500;letter-spacing:.04em">.studio</span>
+      </span>
+    </div>
+    <ul class="footer-links">
+      <li><a href="#services"  data-i18n="nav.services">Послуги</a></li>
+      <li><a href="#portfolio" data-i18n="nav.portfolio">Портфоліо</a></li>
+      <li><a href="#contact"   data-i18n="nav.cta">Зв'язатись</a></li>
+    </ul>
+    <div class="footer-copy" data-i18n="footer.copy">© 2025 telegrambot.studio. Всі права захищені.</div>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════
+   TRANSLATIONS
+═══════════════════════════════════════ */
+const DICT = {
+  uk: {
+    "nav.services":"Послуги","nav.why":"Чому ми","nav.process":"Процес",
+    "nav.portfolio":"Портфоліо","nav.cta":"Зв'язатись",
+    "hero.badge":"Відкриті до нових проєктів",
+    "hero.title1":"Telegram-боти та сайти,",
+    "hero.title2":"що ","hero.title3":"працюють на вас",
+    "hero.sub":"Автоматизуємо бізнес-процеси, підвищуємо конверсії та створюємо сучасні цифрові продукти — щоб ви зосередились на зростанні.",
+    "hero.btn1":"Залишити заявку","hero.btn2":"Написати в Telegram",
+    "hero.stat1n":"3д+","hero.stat1l":"Старт з 3 днів",
+    "hero.stat2l":"Реалізованих проєктів","hero.stat3l":"Задоволених клієнтів",
+    "srv.label":"Що ми робимо","srv.title":"Наші послуги",
+    "srv.sub":"Від розумних ботів до сайтів з високою конверсією — ми створюємо цифрові інструменти, що справді рухають ваш бізнес вперед.",
+    "srv.c1.t":"Telegram-боти",
+    "srv.c1.d":"Автоматизація спілкування з клієнтами, платежі, сповіщення та складні робочі процеси — все всередині Telegram, яким ваші клієнти вже користуються.",
+    "srv.c2.t":"Лендінг-сайти",
+    "srv.c2.d":"Швидкі, візуально чисті односторінкові сайти з високою конверсією — розроблені з нуля, щоб перетворювати відвідувачів на клієнтів.",
+    "srv.c3.t":"Інтеграції",
+    "srv.c3.d":"Підключення до API, баз даних, платіжних сервісів та сторонніх інструментів. Змушуємо ваші сервіси працювати разом як єдиний злагоджений механізм.",
+    "why.label":"Наша перевага","why.title":"Чому обирають telegrambot.studio",
+    "why.sub":"Ми не робимо шаблонного. Кожен проєкт — унікальна бізнес-задача з індивідуальним рішенням.",
+    "why.p1t":"Швидка розробка","why.p1d":"Перша робоча версія від 3 днів. Рухаємось швидко, не жертвуючи якістю.",
+    "why.p2t":"Індивідуальні рішення","why.p2d":"Жодних шаблонів. Кожен рядок коду написано під ваші конкретні цілі.",
+    "why.p3t":"Бізнес-орієнтований підхід","why.p3d":"Думаємо конверсіями та ROI, а не лише кодом і пікселями. Результат — понад усе.",
+    "why.p4t":"Підтримка після запуску","why.p4d":"Залишаємось поруч після релізу. Оновлення, фікси, ітерації — ми поруч.",
+    "proc.label":"Як це працює","proc.title":"Наш процес",
+    "proc.sub":"Просто, прозоро та побудовано навколо ваших потреб. Ось як ми перетворюємо ідею на готовий продукт.",
+    "proc.s1t":"Заявка","proc.s1d":"Розкажіть про проєкт. Уважно слухаємо та занурюємось у ваші цілі й задачі.",
+    "proc.s2t":"Аналіз","proc.s2d":"Обираємо оптимальний технічний підхід і складаємо чіткий план розробки.",
+    "proc.s3t":"Розробка","proc.s3d":"Чистий код, регулярні оновлення та повна прозорість на кожному етапі.",
+    "proc.s4t":"Запуск","proc.s4d":"Деплоємо, тестуємо та передаємо. Ви отримуєте готовий продукт, що генерує результати.",
+    "port.label":"Кейси","port.title":"Вибрані роботи",
+    "port.sub":"Реальні проєкти, реальні результати. Погляньте, що ми побудували для бізнесів, подібних до вашого.",
+    "port.tag.bot":"Telegram-бот","port.tag.land":"Лендінг","port.tag.combo":"Бот + Лендінг",
+    "port.p1cat":"Фітнес-індустрія","port.p1tit":"Бот для фітнес-тренера",
+    "port.p1des":"Комплексний Telegram-бот: автоматичний запис, оплата, доставка планів тренувань та відстеження прогресу клієнтів — без сторонніх застосунків.",
+    "port.p1res":"340% утримання клієнтів",
+    "port.p2cat":"E-Commerce","port.p2tit":"Бот-каталог для e-commerce",
+    "port.p2des":"Повноцінний Telegram-магазин: каталог із пошуком, кошик, інтеграція з оплатою, підтвердження замовлень та сповіщення адміністратора.",
+    "port.p2res":"210% конверсія",
+    "port.p3cat":"Юридичні послуги","port.p3tit":"Сайт юридичної компанії",
+    "port.p3des":"Преміум односторінковий сайт: витончений дизайн, швидке завантаження, SEO-оптимізація та форма запису, підключена до Telegram-сповіщень.",
+    "port.p3res":"180% кваліфікованих лідів",
+    "port.p4cat":"SaaS-стартап","port.p4tit":"Система онбордингу SaaS",
+    "port.p4des":"Наш розумний бот-робот зустрічає кожного нового користувача: проводить по продукту, відповідає на питання та автоматично передає корпоративні запити в команду продажів — без жодного ручного втручання.",
+    "port.p4res":"95% завершення онбордингу",
+    "cta.tag":"Працюймо разом","cta.title":"Готові автоматизувати бізнес?",
+    "cta.sub":"Залиште заявку — і ми покажемо рішення, що підходить саме вам. Без шаблонних пітчів і зайвого часу.",
+    "cta.btn1":"Залишити заявку","cta.btn2":"Написати менеджеру",
+    "con.label":"Зв'язок","con.title":"Почнімо розмову",
+    "con.sub":"Заповніть форму — і ми відповімо протягом 1 робочої години. Без спаму та нав'язування — лише фокусна розмова про ваш проєкт.",
+    "form.name":"Ваше ім'я","form.name.err":"Будь ласка, введіть ім'я",
+    "form.contact":"Telegram або телефон","form.contact.err":"Будь ласка, вкажіть спосіб зв'язку",
+    "form.msg":"Опишіть вашу задачу","form.submit":"Надіслати заявку →",
+    "form.ok.t":"Заявку надіслано!","form.ok.d":"Відповімо протягом 1 робочої години. Очікуйте повідомлення в Telegram або на телефон.",
+    "form.err":"Щось пішло не так. Спробуйте ще раз або напишіть нам у Telegram.",
+    "footer.copy":"© 2025 telegrambot.studio. Всі права захищені.",
+    "meta.t":"telegrambot.studio — Telegram-боти та сайти з високою конверсією",
+    "meta.d":"Розробляємо Telegram-боти та лендінги, що автоматизують бізнес і максимізують результати."
+  },
+  en: {
+    "nav.services":"Services","nav.why":"Why Us","nav.process":"Process",
+    "nav.portfolio":"Portfolio","nav.cta":"Get in Touch",
+    "hero.badge":"Available for new projects",
+    "hero.title1":"Telegram Bots and Websites",
+    "hero.title2":"That ","hero.title3":"Work For You",
+    "hero.sub":"We automate business processes, increase conversions, and build modern digital products — so you can focus on growth.",
+    "hero.btn1":"Submit Request","hero.btn2":"Contact via Telegram",
+    "hero.stat1n":"3d+","hero.stat1l":"Delivery starts",
+    "hero.stat2l":"Projects delivered","hero.stat3l":"Client satisfaction",
+    "srv.label":"What we build","srv.title":"Our Services",
+    "srv.sub":"From intelligent bots to conversion-focused websites — we build digital tools that genuinely drive your business forward.",
+    "srv.c1.t":"Telegram Bots",
+    "srv.c1.d":"Automation of client interaction, payments, notifications, and complex business workflows — all inside the Telegram interface your users already love.",
+    "srv.c2.t":"Landing Websites",
+    "srv.c2.d":"High-conversion, fast, and visually clean one-page websites designed from the ground up to turn visitors into customers.",
+    "srv.c3.t":"Integrations",
+    "srv.c3.d":"Seamless connection with APIs, databases, payment systems, and third-party services. We make your tools talk to each other like a single unified system.",
+    "why.label":"Our edge","why.title":"Why Teams Choose telegrambot.studio",
+    "why.sub":"We don't do generic. Every project is treated as a unique business challenge with a tailored solution.",
+    "why.p1t":"Fast Delivery","why.p1d":"First working version from 3 days. We move fast without compromising quality.",
+    "why.p2t":"Custom Solutions","why.p2d":"No templates. Every line of code is written for your specific business goals.",
+    "why.p3t":"Business-Oriented","why.p3d":"We think in ROI and conversions, not just code and pixels. Results first.",
+    "why.p4t":"Post-Launch Support","why.p4d":"We stay around after go-live. Updates, fixes, and iterations — we've got you covered.",
+    "proc.label":"How it works","proc.title":"Our Process",
+    "proc.sub":"Simple, transparent, and built around your needs. Here's how we take you from idea to live product.",
+    "proc.s1t":"Request","proc.s1d":"Tell us about your project. We listen carefully to understand your goals and challenges.",
+    "proc.s2t":"Analysis","proc.s2d":"We map out the best technical approach and create a clear development plan.",
+    "proc.s3t":"Development","proc.s3d":"Clean code, regular updates, and full transparency throughout the build.",
+    "proc.s4t":"Launch","proc.s4d":"We deploy, test, and hand over. You get a polished product ready to generate results.",
+    "port.label":"Case studies","port.title":"Selected Work",
+    "port.sub":"Real projects, real results. Here's a look at what we've built for businesses like yours.",
+    "port.tag.bot":"Telegram Bot","port.tag.land":"Landing Page","port.tag.combo":"Bot + Landing",
+    "port.p1cat":"Fitness Industry","port.p1tit":"Fitness Trainer Bot",
+    "port.p1des":"An all-in-one Telegram bot: automated scheduling, payment collection, workout plan delivery, and client progress tracking — no external apps needed.",
+    "port.p1res":"+340% client retention",
+    "port.p2cat":"E-Commerce","port.p2tit":"E-Commerce Catalog Bot",
+    "port.p2des":"A full-featured Telegram store: product catalog with search, cart, payment integration, order confirmation, and admin notifications.",
+    "port.p2res":"+210% conversion rate",
+    "port.p3cat":"Professional Services","port.p3tit":"Law Firm Landing Page",
+    "port.p3des":"A premium one-page website: refined design, fast load, SEO-optimized structure, and a consultation booking form connected to a Telegram notification bot.",
+    "port.p3res":"+180% qualified leads",
+    "port.p4cat":"SaaS Startup","port.p4tit":"SaaS Onboarding System",
+    "port.p4des":"Our smart bot-robot greets every new user: walks them through the product, answers questions, and automatically routes enterprise requests to the sales team — zero manual work required.",
+    "port.p4res":"+95% onboarding completion",
+    "cta.tag":"Let's work together","cta.title":"Ready to automate your business?",
+    "cta.sub":"Leave a request and we'll show you a solution designed specifically for your goals — no generic pitches, no wasted time.",
+    "cta.btn1":"Submit Request","cta.btn2":"Contact Manager",
+    "con.label":"Get in touch","con.title":"Let's Start a Conversation",
+    "con.sub":"Fill in the form and we'll get back to you within 1 business hour. No spam, no pressure — just a focused conversation about your project.",
+    "form.name":"Your Name","form.name.err":"Please enter your name",
+    "form.contact":"Telegram or Phone","form.contact.err":"Please enter a contact method",
+    "form.msg":"Tell us about your project","form.submit":"Send Request →",
+    "form.ok.t":"Request sent!","form.ok.d":"We'll be in touch within 1 business hour. Watch your Telegram or phone for our reply.",
+    "form.err":"Something went wrong. Please try again or contact us directly via Telegram.",
+    "footer.copy":"© 2025 telegrambot.studio. All rights reserved.",
+    "meta.t":"telegrambot.studio — Telegram Bots & High-Conversion Websites",
+    "meta.d":"We build Telegram bots and high-conversion landing pages that automate your business and maximize results."
+  }
+};
+
+/* ═══════════════════════════════════════
+   LANGUAGE ENGINE
+═══════════════════════════════════════ */
+let lang = localStorage.getItem('bf_lang') || 'uk';
+
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('bf_lang', l);
+  applyLang();
+}
+
+function applyLang() {
+  const t = DICT[lang];
+  document.documentElement.lang = lang;
+
+  // meta
+  document.title = t['meta.t'];
+  document.querySelector('meta[name="description"]').setAttribute('content', t['meta.d']);
+
+  // text nodes
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const v = t[el.dataset.i18n];
+    if (v !== undefined) el.textContent = v;
+  });
+
+  // placeholders (data-ph-uk / data-ph-en)
+  document.querySelectorAll('[data-ph-uk]').forEach(el => {
+    el.placeholder = lang === 'uk' ? el.dataset.phUk : el.dataset.phEn;
+  });
+
+  // switcher buttons active state — all of them (desktop + mobile)
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    const isUA = btn.textContent.trim() === 'UA';
+    const isEN = btn.textContent.trim() === 'EN';
+    btn.classList.toggle('active', (isUA && lang==='uk') || (isEN && lang==='en'));
+  });
+}
+
+/* ═══════════════════════════════════════
+   NAV SCROLL
+═══════════════════════════════════════ */
+window.addEventListener('scroll', () =>
+  document.getElementById('navbar').classList.toggle('scrolled', scrollY > 20));
+
+/* ═══════════════════════════════════════
+   MOBILE MENU
+═══════════════════════════════════════ */
+document.getElementById('menuBtn').addEventListener('click', () =>
+  document.getElementById('mobileMenu').classList.add('open'));
+document.getElementById('menuClose').addEventListener('click', closeMobileMenu);
+function closeMobileMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+/* ═══════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════ */
+const obs = new IntersectionObserver(entries =>
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } }),
+  { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* ═══════════════════════════════════════
+   FORM
+═══════════════════════════════════════ */
+async function handleSubmit() {
+  const nameEl    = document.getElementById('fname');
+  const contactEl = document.getElementById('fcontact');
+  const msgEl     = document.getElementById('fmessage');
+  const hp        = document.getElementById('hp_field').value;
+  const btn       = document.getElementById('submitBtn');
+  if (hp) return;
+
+  ['fname-err','fcontact-err'].forEach(id => document.getElementById(id).classList.remove('show'));
+  [nameEl, contactEl].forEach(el => el.classList.remove('error'));
+
+  let ok = true;
+  if (!nameEl.value.trim())    { nameEl.classList.add('error');    document.getElementById('fname-err').classList.add('show');    ok=false; }
+  if (!contactEl.value.trim()) { contactEl.classList.add('error'); document.getElementById('fcontact-err').classList.add('show'); ok=false; }
+  if (!ok) return;
+
+  btn.classList.add('loading'); btn.disabled = true;
+
+  try {
+    const res  = await fetch('http://localhost:3001/api/lead', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ name:nameEl.value.trim(), contact:contactEl.value.trim(), message:msgEl.value.trim() })
+    });
+    const data = await res.json();
+    if (data.success) showSuccess();
+    else throw new Error(data.error);
+  } catch(err) {
+    // Demo fallback – remove in production
+    if (/Failed to fetch|NetworkError/i.test(err.message)) { showSuccess(); return; }
+    btn.classList.remove('loading'); btn.disabled = false;
+    alert(DICT[lang]['form.err']);
+  }
+}
+
+function showSuccess() {
+  document.getElementById('formContent').style.display = 'none';
+  document.getElementById('formSuccess').classList.add('show');
+}
+
+/* ═══════════════════════════════════════
+   SMOOTH ANCHOR SCROLL
+═══════════════════════════════════════ */
+document.querySelectorAll('a[href^="#"]').forEach(a =>
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) { e.preventDefault(); t.scrollIntoView({behavior:'smooth',block:'start'}); }
+  }));
+
+/* ═══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
+applyLang();
+</script>
+</body>
+</html>
