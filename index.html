@@ -931,19 +931,32 @@ async function handleSubmit() {
 
   btn.classList.add('loading'); btn.disabled = true;
 
+  const TG_TOKEN  = '8519232112:AAHWbdb_i6wjMqogD3blZqE-mkewTLHt95c';
+  const TG_CHAT   = '887078537';
+
+  const text = [
+    '📬 <b>Нова заявка з сайту</b>',
+    '',
+    '👤 <b>Ім\'я:</b> ' + nameEl.value.trim(),
+    '📞 <b>Контакт:</b> ' + contactEl.value.trim(),
+    '💬 <b>Повідомлення:</b> ' + (msgEl.value.trim() || '—'),
+    '',
+    '🕐 ' + new Date().toLocaleString('uk-UA', {timeZone:'Europe/Kyiv'})
+  ].join('\n');
+
   try {
-    const res  = await fetch('/api/lead', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ name:nameEl.value.trim(), contact:contactEl.value.trim(), message:msgEl.value.trim() })
+    const res = await fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ chat_id: TG_CHAT, text: text, parse_mode: 'HTML' })
     });
     const data = await res.json();
-    if (data.success) showSuccess();
-    else throw new Error(data.error);
+    if (data.ok) showSuccess();
+    else throw new Error(data.description);
   } catch(err) {
-    // Demo fallback – remove in production
-    if (/Failed to fetch|NetworkError/i.test(err.message)) { showSuccess(); return; }
     btn.classList.remove('loading'); btn.disabled = false;
     alert(DICT[lang]['form.err']);
+    console.error('Telegram error:', err);
   }
 }
 
