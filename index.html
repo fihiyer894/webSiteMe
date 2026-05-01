@@ -138,8 +138,111 @@ section{padding:112px 0}
 .service-title{font-size:1.25rem;font-weight:700;color:var(--navy);margin-bottom:12px;letter-spacing:-.02em}
 .service-desc{font-size:.9375rem;color:var(--text-s);line-height:1.65;font-family:'DM Sans',sans-serif}
 
-/* ── WHY ── */
-#why{background:var(--bg2)}
+/* ── PHONE MOCKUP ── */
+.phone-mockup-wrap{position:relative;display:flex;flex-direction:column;align-items:center;z-index:2}
+.phone-frame{width:240px;height:480px;background:linear-gradient(160deg,#1a1a2e,#0d0d1a);border-radius:40px;
+  border:2px solid rgba(255,255,255,0.12);box-shadow:0 0 0 1px rgba(0,0,0,.5),0 40px 80px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.1);
+  position:relative;overflow:hidden;animation:float 5s ease-in-out infinite}
+.phone-notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:90px;height:26px;background:#0d0d1a;border-radius:0 0 18px 18px;z-index:10}
+.phone-screen{position:absolute;top:10px;left:4px;right:4px;bottom:20px;border-radius:32px;overflow:hidden;background:#fff}
+.phone-bar{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:80px;height:4px;background:rgba(255,255,255,.3);border-radius:4px}
+
+/* slides */
+.phone-slide{position:absolute;inset:0;transition:transform .7s cubic-bezier(0.4,0,0.2,1),opacity .7s ease}
+.phone-slide.slide-exit-left{transform:translateX(-100%);opacity:0}
+.phone-slide.slide-enter-right{transform:translateX(100%);opacity:0}
+.phone-slide.slide-active{transform:translateX(0);opacity:1}
+
+/* Telegram screen */
+.tg-header{display:flex;align-items:center;gap:10px;padding:12px 14px 10px;background:#2F6BFF;color:#fff}
+.tg-avatar{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:18px}
+.tg-name{font-size:13px;font-weight:700;font-family:'Sora',sans-serif}
+.tg-status{font-size:10px;opacity:.8;font-family:'DM Sans',sans-serif}
+.tg-messages{padding:12px 10px;display:flex;flex-direction:column;gap:8px;background:#f0f4ff;min-height:calc(100% - 60px)}
+.tg-msg{max-width:80%;padding:9px 13px;border-radius:16px;font-size:11.5px;line-height:1.45;font-family:'DM Sans',sans-serif;opacity:0;transform:translateY(10px);transition:opacity .5s ease,transform .5s ease}
+.tg-msg--bot{background:#fff;color:#0A1F44;align-self:flex-start;border-bottom-left-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.tg-msg--user{background:#2F6BFF;color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.tg-btns{display:flex;flex-direction:column;gap:6px;opacity:0;transform:translateY(10px);transition:opacity .5s ease,transform .5s ease}
+.tg-btn-item{background:#fff;border:1.5px solid #2F6BFF;color:#2F6BFF;padding:8px 12px;border-radius:12px;font-size:11px;font-weight:600;font-family:'Sora',sans-serif;text-align:center}
+
+.tg-anim-1{animation:msgIn 0.5s ease 0.4s forwards}
+.tg-anim-2{animation:msgIn 0.5s ease 1.2s forwards}
+.tg-anim-3{animation:msgIn 0.5s ease 2.1s forwards}
+.tg-anim-4{animation:msgIn 0.5s ease 3s forwards}
+@keyframes msgIn{to{opacity:1;transform:translateY(0)}}
+
+/* Site preview screen */
+.site-preview{display:flex;flex-direction:column;gap:0;height:100%;background:#F4F7FF;padding:0}
+.site-nav{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#fff;border-bottom:1px solid #e8ecf8}
+.site-logo-dot{width:22px;height:22px;background:#2F6BFF;border-radius:6px}
+.site-nav-lines{display:flex;gap:5px;align-items:center}
+.snl{height:3px;border-radius:2px;background:#e0e6f5}
+.snl-1{width:24px}.snl-2{width:18px}.snl-3{width:12px}
+.site-hero-text{padding:14px 14px 10px;background:linear-gradient(135deg,#fff,#EEF3FF)}
+.sht{height:8px;border-radius:4px;margin-bottom:6px;background:#0A1F44;opacity:.12}
+.sht-1{width:90%;opacity:.2}.sht-2{width:70%;opacity:.14}.sht-3{width:55%;opacity:.09}
+.site-cta-btn{display:inline-block;margin-top:6px;background:#2F6BFF;color:#fff;font-size:9px;font-weight:700;padding:6px 12px;border-radius:20px;font-family:'Sora',sans-serif}
+.site-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:10px 10px}
+.site-card{background:#fff;border-radius:8px;padding:8px;border:1px solid #e8ecf8}
+.sc-dark{background:#0A1F44}
+.sc-icon{font-size:14px;margin-bottom:5px}
+.sc-line{height:3px;border-radius:2px;background:#e0e6f5;margin-bottom:3px}
+.sc-dark .sc-line{background:rgba(255,255,255,.15)}
+.sc-line--short{width:60%}
+.site-stats-row{display:flex;justify-content:space-around;padding:10px 8px;background:#fff;margin:0 10px 10px;border-radius:10px;border:1px solid #e8ecf8}
+.site-stat{display:flex;flex-direction:column;align-items:center;gap:1px}
+.ss-num{font-size:13px;font-weight:800;color:#2F6BFF;font-family:'Sora',sans-serif}
+.ss-lbl{font-size:8px;color:#5A5A5A;font-family:'DM Sans',sans-serif}
+
+/* Phone float badges */
+.phone-float-badge{position:absolute;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);
+  border:1px solid rgba(47,107,255,.15);color:#0A1F44;font-size:.72rem;font-weight:600;
+  padding:7px 14px;border-radius:50px;box-shadow:0 4px 16px rgba(47,107,255,.15);white-space:nowrap;font-family:'Sora',sans-serif}
+.phone-float-badge--1{top:60px;left:-80px;animation:badge-float 4s ease-in-out infinite}
+.phone-float-badge--2{top:180px;right:-90px;animation:badge-float 4s ease-in-out infinite;animation-delay:1s}
+.phone-float-badge--3{bottom:90px;left:-90px;animation:badge-float 4s ease-in-out infinite;animation-delay:2s}
+@keyframes badge-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* Phone dots */
+.phone-dots{display:flex;gap:7px;margin-top:16px}
+.phone-dot{width:7px;height:7px;border-radius:50%;background:rgba(47,107,255,.2);transition:background .3s,width .3s}
+.phone-dot--active{background:var(--accent);width:20px;border-radius:4px}
+
+/* ── WHY SECTION DARK ── */
+#why{background:linear-gradient(140deg,var(--navy) 0%,#0e2b6e 60%,#1a3f8f 100%);position:relative;overflow:hidden}
+#why::before{content:'';position:absolute;top:-150px;right:-150px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(47,107,255,.2) 0%,transparent 70%);pointer-events:none}
+#why .section-label{color:#7aaaff}
+#why .section-title{color:#fff}
+#why .section-sub{color:rgba(255,255,255,.65)}
+#why .why-point{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+#why .why-point:hover{background:rgba(255,255,255,.1);border-color:rgba(47,107,255,.4)}
+#why .why-point-title{color:#fff}
+#why .why-point-desc{color:rgba(255,255,255,.6)}
+
+/* ── COUNTERS ── */
+.hero-stat-num{transition:all .1s}
+
+/* ── REVIEWS ── */
+#reviews{background:var(--bg2);padding:112px 0}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:0}
+.review-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:36px 32px;box-shadow:var(--shadow);
+  transition:transform var(--tr),box-shadow var(--tr);position:relative}
+.review-card::before{content:'❝';position:absolute;top:20px;right:24px;font-size:3rem;color:var(--accent);opacity:.12;font-family:Georgia,serif;line-height:1}
+.review-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-hover)}
+.review-stars{display:flex;gap:3px;margin-bottom:16px}
+.review-star{color:#FFB800;font-size:15px}
+.review-text{font-size:.9375rem;color:var(--text-s);line-height:1.7;font-family:'DM Sans',sans-serif;margin-bottom:24px;position:relative;z-index:1}
+.review-author{display:flex;align-items:center;gap:12px;border-top:1px solid var(--border);padding-top:20px}
+.review-avatar{width:40px;height:40px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.875rem;font-family:'Sora',sans-serif;flex-shrink:0}
+.review-name{font-size:.9rem;font-weight:700;color:var(--navy);font-family:'Sora',sans-serif}
+.review-role{font-size:.78rem;color:var(--text-s);font-family:'DM Sans',sans-serif}
+
+@media(max-width:900px){
+  .reviews-grid{grid-template-columns:1fr}
+  .phone-float-badge--1,.phone-float-badge--3{left:-60px}
+  .phone-float-badge--2{right:-60px}
+}
+
 .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
 .why-points{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 .why-point{background:#fff;border-radius:16px;padding:28px 24px;border:1px solid var(--border);transition:transform var(--tr),box-shadow var(--tr)}
@@ -360,7 +463,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.5);padding:48px 0}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 0116 1.18a2 2 0 012 2v3a2 2 0 01-1.44 1.93 15.91 15.91 0 00-3.27.92 1 1 0 01-.98-.21l-2.16-2.16a15.93 15.93 0 01-7.24 7.24l2.16 2.16a1 1 0 01.21.98 15.91 15.91 0 00-.92 3.27A2 2 0 0122 16.92z"/></svg>
             <span data-i18n="hero.btn1">Залишити заявку</span>
           </a>
-          <a href="https://t.me/CreatorBotInst" target="_blank" class="btn btn-secondary">
+          <a href="https://t.me/yourusername" target="_blank" class="btn btn-secondary">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.96 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
             <span data-i18n="hero.btn2">Написати в Telegram</span>
           </a>
@@ -380,10 +483,53 @@ footer{background:var(--navy);color:rgba(255,255,255,.5);padding:48px 0}
           </div>
         </div>
       </div>
-      <!-- Robot -->
+      <!-- Animated Phone -->
       <div class="robot-wrap reveal reveal-delay-2">
         <div class="robot-glow"></div>
-        <div class="robot-svg-container">
+        <div class="phone-mockup-wrap">
+          <div class="phone-float-badge phone-float-badge--1">🤖 Бот активний</div>
+          <div class="phone-float-badge phone-float-badge--2">⚡ Автоматизація</div>
+          <div class="phone-float-badge phone-float-badge--3">📈 +340% конверсія</div>
+          <div class="phone-frame">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <div class="phone-slide" id="slide-bot">
+                <div class="tg-header">
+                  <div class="tg-avatar">🤖</div>
+                  <div class="tg-info"><div class="tg-name">TelegramBot Studio</div><div class="tg-status">онлайн</div></div>
+                </div>
+                <div class="tg-messages">
+                  <div class="tg-msg tg-msg--bot tg-anim-1">👋 Привіт! Чим можу допомогти?</div>
+                  <div class="tg-msg tg-msg--user tg-anim-2">Хочу замовити бота 🚀</div>
+                  <div class="tg-msg tg-msg--bot tg-anim-3">Чудово! Зв'яжемось з вами протягом години ⚡</div>
+                  <div class="tg-btns tg-anim-4">
+                    <div class="tg-btn-item">📋 Залишити заявку</div>
+                    <div class="tg-btn-item">💬 Написати менеджеру</div>
+                  </div>
+                </div>
+              </div>
+              <div class="phone-slide" id="slide-site">
+                <div class="site-preview">
+                  <div class="site-nav"><div class="site-logo-dot"></div><div class="site-nav-lines"><div class="snl snl-1"></div><div class="snl snl-2"></div><div class="snl snl-3"></div></div></div>
+                  <div class="site-hero-text"><div class="sht sht-1"></div><div class="sht sht-2"></div><div class="sht sht-3"></div><div class="site-cta-btn">Залишити заявку →</div></div>
+                  <div class="site-cards">
+                    <div class="site-card sc-blue"><div class="sc-icon">🤖</div><div class="sc-line"></div><div class="sc-line sc-line--short"></div></div>
+                    <div class="site-card sc-dark"><div class="sc-icon">🌐</div><div class="sc-line"></div><div class="sc-line sc-line--short"></div></div>
+                    <div class="site-card sc-blue"><div class="sc-icon">⚡</div><div class="sc-line"></div><div class="sc-line sc-line--short"></div></div>
+                  </div>
+                  <div class="site-stats-row">
+                    <div class="site-stat"><span class="ss-num">50+</span><span class="ss-lbl">Проєктів</span></div>
+                    <div class="site-stat"><span class="ss-num">98%</span><span class="ss-lbl">Клієнтів</span></div>
+                    <div class="site-stat"><span class="ss-num">3д</span><span class="ss-lbl">Старт</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="phone-bar"></div>
+          </div>
+          <div class="phone-dots"><div class="phone-dot phone-dot--active" id="dot-0"></div><div class="phone-dot" id="dot-1"></div></div>
+        </div>
+        <div style="display:none">
           <svg width="320" height="360" viewBox="0 0 340 380" fill="none" xmlns="http://www.w3.org/2000/svg">
             <ellipse cx="170" cy="370" rx="80" ry="10" fill="rgba(47,107,255,0.1)"/>
             <rect x="163" y="20" width="14" height="38" rx="7" fill="#0A1F44"/>
@@ -518,6 +664,43 @@ footer{background:var(--navy);color:rgba(255,255,255,.5);padding:48px 0}
         <div class="step-circle">04</div>
         <div class="step-title" data-i18n="proc.s4t">Запуск</div>
         <div class="step-desc"  data-i18n="proc.s4d">Деплоємо, тестуємо та передаємо. Ви отримуєте готовий продукт, що генерує результати.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ REVIEWS ══ -->
+<section id="reviews">
+  <div class="container">
+    <div class="section-header-center reveal">
+      <span class="section-label">Відгуки</span>
+      <h2 class="section-title">Що кажуть клієнти</h2>
+      <p class="section-sub">Реальні люди, реальний досвід роботи з нами.</p>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card reveal">
+        <div class="review-stars">⭐⭐⭐⭐⭐</div>
+        <p class="review-text">Все дуже класно зроблено, допомогли розібратися — хлопці молодці!</p>
+        <div class="review-author">
+          <div class="review-avatar">А</div>
+          <div><div class="review-name">Андрій К.</div><div class="review-role">Підприємець</div></div>
+        </div>
+      </div>
+      <div class="review-card reveal reveal-delay-1">
+        <div class="review-stars">⭐⭐⭐⭐⭐</div>
+        <p class="review-text">Це той випадок, коли результат перевищив очікування. Максимальна уважність, швидкість і повний контроль процесу. Робота — на 100%. Дякую!</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:#5b8fff">М</div>
+          <div><div class="review-name">Марія Л.</div><div class="review-role">Власник онлайн-магазину</div></div>
+        </div>
+      </div>
+      <div class="review-card reveal reveal-delay-2">
+        <div class="review-stars">⭐⭐⭐⭐⭐</div>
+        <p class="review-text">Дуже дякую за створення каналу в Telegram і бота для каналу! Все швидко, якісно і круто. Не очікувала, що так швидко виконають роботу. Дуже дякую за інструкцію та роз'яснення — рекомендую і буду рекомендувати!</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:#34c759">О</div>
+          <div><div class="review-name">Олена В.</div><div class="review-role">Блогер / автор каналу</div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -931,9 +1114,8 @@ async function handleSubmit() {
 
   btn.classList.add('loading'); btn.disabled = true;
 
-  const TG_TOKEN  = '8519232112:AAHWbdb_i6wjMqogD3blZqE-mkewTLHt95c';
-  const TG_CHAT   = '887078537';
-
+  const TG_TOKEN = '8519232112:AAHWbdb_i6wjMqogD3blZqE-mkewTLHt95c';
+  const TG_CHAT  = '887078537';
   const text = [
     '📬 <b>Нова заявка з сайту</b>',
     '',
@@ -945,10 +1127,9 @@ async function handleSubmit() {
   ].join('\n');
 
   try {
-    const res = await fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ chat_id: TG_CHAT, text: text, parse_mode: 'HTML' })
+    const res  = await fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ chat_id: TG_CHAT, text, parse_mode:'HTML' })
     });
     const data = await res.json();
     if (data.ok) showSuccess();
@@ -977,6 +1158,108 @@ document.querySelectorAll('a[href^="#"]').forEach(a =>
 /* ═══════════════════════════════════════
    INIT
 ═══════════════════════════════════════ */
+/* ═══════════════════════════════════════
+   PHONE SLIDER
+═══════════════════════════════════════ */
+(function(){
+  const slides = ['slide-bot','slide-site'];
+  const dots   = ['dot-0','dot-1'];
+  let cur = 0;
+
+  function showSlide(next) {
+    const prevEl = document.getElementById(slides[cur]);
+    const nextEl = document.getElementById(slides[next]);
+    if (!prevEl || !nextEl) return;
+
+    // reset messages animation each time slide-bot shown
+    if (slides[next] === 'slide-bot') {
+      prevEl.querySelectorAll('.tg-anim-1,.tg-anim-2,.tg-anim-3,.tg-anim-4').forEach(el => {
+        el.style.animation = 'none';
+        el.offsetHeight; // reflow
+        el.style.animation = '';
+      });
+    }
+
+    prevEl.classList.add('slide-exit-left');
+    nextEl.style.transform = 'translateX(100%)';
+    nextEl.style.opacity   = '0';
+    nextEl.style.display   = 'block';
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        nextEl.style.transition = 'transform .7s cubic-bezier(0.4,0,0.2,1), opacity .7s ease';
+        nextEl.style.transform  = 'translateX(0)';
+        nextEl.style.opacity    = '1';
+        prevEl.style.transition = 'transform .7s cubic-bezier(0.4,0,0.2,1), opacity .7s ease';
+        prevEl.style.transform  = 'translateX(-100%)';
+        prevEl.style.opacity    = '0';
+      });
+    });
+
+    setTimeout(() => {
+      prevEl.style.display = 'none';
+      prevEl.style.transform = '';
+      prevEl.style.opacity = '';
+      prevEl.classList.remove('slide-exit-left');
+    }, 750);
+
+    document.getElementById(dots[cur]).classList.remove('phone-dot--active');
+    document.getElementById(dots[next]).classList.add('phone-dot--active');
+    cur = next;
+  }
+
+  // init: hide second slide
+  const s1 = document.getElementById(slides[1]);
+  if (s1) s1.style.display = 'none';
+
+  // auto-rotate every 5s
+  setInterval(() => {
+    showSlide((cur + 1) % slides.length);
+  }, 5000);
+})();
+
+/* ═══════════════════════════════════════
+   COUNTERS
+═══════════════════════════════════════ */
+(function(){
+  const counters = [
+    { selector: '.hero-stat-num', targets: [null, 50, 98] }
+  ];
+
+  function animateCount(el, target, suffix) {
+    let start = 0;
+    const dur  = 1800;
+    const step = 16;
+    const inc  = target / (dur / step);
+    const timer = setInterval(() => {
+      start = Math.min(start + inc, target);
+      el.textContent = Math.floor(start) + suffix;
+      if (start >= target) clearInterval(timer);
+    }, step);
+  }
+
+  const statEls = document.querySelectorAll('.hero-stat-num');
+  const data = [
+    { target: null,  text: '3д+' },
+    { target: 50,    suffix: '+' },
+    { target: 98,    suffix: '%' },
+  ];
+
+  let triggered = false;
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting && !triggered) {
+        triggered = true;
+        statEls.forEach((el, i) => {
+          if (data[i].target !== null) animateCount(el, data[i].target, data[i].suffix);
+        });
+      }
+    });
+  }, { threshold: 0.5 });
+
+  if (statEls[0]) observer.observe(statEls[0]);
+})();
+
 applyLang();
 </script>
 </body>
